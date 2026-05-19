@@ -1,0 +1,2357 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mani Sports Bar – La Mata, Alicante</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800;900&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --red: #C0112B;
+    --red-dark: #8b0d1f;
+    --red-glow: #e8122e;
+    --black: #0a0a0a;
+    --dark: #111111;
+    --dark2: #1a1a1a;
+    --dark3: #222222;
+    --gold: #d4a017;
+    --gold-light: #f0c040;
+    --white: #f5f0eb;
+    --gray: #aaa;
+    --light-gray: #ddd;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: #050508;
+    color: var(--white);
+    font-family: 'Barlow', sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  #bgCanvas {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  /* All sections sit above the global canvas */
+  nav, section, footer, .info-strip, .sports-ticker {
+    position: relative;
+    z-index: 1;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    background: rgba(10,10,10,0.95);
+    backdrop-filter: blur(8px);
+    border-bottom: 2px solid var(--red);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 2rem;
+    height: 64px;
+  }
+
+  .nav-logo {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 900;
+    font-size: 1.6rem;
+    color: var(--white);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  .nav-logo span { color: var(--red); }
+
+  .nav-links {
+    display: flex;
+    gap: 1.8rem;
+    list-style: none;
+  }
+
+  .nav-links a {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: var(--gray);
+    text-decoration: none;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    transition: color 0.2s;
+  }
+
+  .nav-links a:hover { color: var(--red); }
+
+  .nav-cta {
+    background: var(--red);
+    color: var(--white) !important;
+    padding: 0.35rem 1rem;
+    border-radius: 2px;
+  }
+
+  .nav-cta:hover { background: var(--red-dark); color: var(--white) !important; }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    position: relative;
+    background: transparent;
+    overflow: hidden;
+    padding: 80px 2rem 2rem;
+  }
+
+  .hero-overlay {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 60% 50% at 50% 100%, rgba(192,17,43,0.35) 0%, transparent 65%),
+      radial-gradient(ellipse 40% 30% at 20% 20%, rgba(192,17,43,0.12) 0%, transparent 60%),
+      radial-gradient(ellipse 40% 30% at 80% 20%, rgba(192,17,43,0.12) 0%, transparent 60%),
+      linear-gradient(180deg, rgba(5,5,8,0.3) 0%, rgba(5,5,8,0.1) 40%, rgba(5,5,8,0.7) 100%);
+    z-index: 1;
+  }
+
+  .hero-content { position: relative; z-index: 2; max-width: 900px; }
+
+  .hero-eyebrow {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 600;
+    font-size: 0.85rem;
+    color: var(--red);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin-bottom: 1.2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.8rem;
+  }
+
+  .hero-eyebrow::before,
+  .hero-eyebrow::after {
+    content: '';
+    display: block;
+    width: 40px;
+    height: 1px;
+    background: var(--red);
+  }
+
+  .hero h1 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 900;
+    font-size: clamp(4rem, 12vw, 9rem);
+    line-height: 0.9;
+    text-transform: uppercase;
+    letter-spacing: -0.01em;
+    color: var(--white);
+    margin-bottom: 0.2em;
+  }
+
+  .hero h1 .accent { color: var(--red); display: block; }
+
+  .hero-subtitle {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 600;
+    font-size: 1.3rem;
+    color: var(--gray);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 2.5rem;
+  }
+
+  .hero-rating {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: var(--dark2);
+    border: 1px solid var(--dark3);
+    border-radius: 2px;
+    padding: 0.6rem 1.2rem;
+    margin-bottom: 2.5rem;
+    font-size: 0.9rem;
+  }
+
+  .stars { color: var(--gold); font-size: 1rem; }
+
+  .hero-cta-group {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .btn-primary {
+    background: var(--red);
+    color: var(--white);
+    padding: 0.85rem 2rem;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 1rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    border-radius: 2px;
+    transition: background 0.2s, transform 0.1s;
+    display: inline-block;
+  }
+
+  .btn-primary:hover { background: var(--red-dark); transform: translateY(-1px); }
+
+  .btn-outline {
+    background: transparent;
+    color: var(--white);
+    padding: 0.85rem 2rem;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 1rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    text-decoration: none;
+    border: 1px solid rgba(255,255,255,0.25);
+    cursor: pointer;
+    border-radius: 2px;
+    transition: border-color 0.2s, transform 0.1s;
+    display: inline-block;
+  }
+
+  .btn-outline:hover { border-color: var(--red); color: var(--red); transform: translateY(-1px); }
+
+  /* INFO STRIP */
+  .info-strip {
+    background: var(--red);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 3rem;
+    padding: 0.9rem 2rem;
+    flex-wrap: wrap;
+  }
+
+  .info-item {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 600;
+    font-size: 0.95rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--white);
+  }
+
+  .info-item svg { opacity: 0.85; flex-shrink: 0; }
+
+  /* SECTION STYLES */
+  section { padding: 5rem 2rem; }
+
+  .section-header {
+    text-align: center;
+    margin-bottom: 3rem;
+  }
+
+  .section-label {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 600;
+    font-size: 0.75rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--red);
+    margin-bottom: 0.6rem;
+  }
+
+  .section-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 900;
+    font-size: clamp(2.2rem, 5vw, 3.5rem);
+    text-transform: uppercase;
+    letter-spacing: -0.01em;
+    line-height: 1;
+    color: var(--white);
+  }
+
+  .section-title span { color: var(--red); }
+
+  .divider {
+    width: 48px;
+    height: 3px;
+    background: var(--red);
+    margin: 1rem auto 0;
+  }
+
+  /* FEATURES */
+  .features-section {
+    background: rgba(13,13,16,0.75);
+    position: relative;
+  }
+
+  .features-section::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse 70% 40% at 50% 0%, rgba(192,17,43,0.08) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .features-grid {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .feature-card {
+    background: var(--dark2);
+    border: 1px solid var(--dark3);
+    border-top: 3px solid var(--red);
+    padding: 2rem 1.5rem;
+    text-align: center;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+
+  .feature-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 32px rgba(192,17,43,0.2);
+  }
+
+  .feature-icon {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    display: block;
+  }
+
+  .feature-card h3 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 800;
+    font-size: 1.1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.5rem;
+    color: var(--white);
+  }
+
+  .feature-card p { font-size: 0.88rem; color: var(--gray); line-height: 1.5; }
+
+  /* MENU SECTION */
+  .menu-section {
+    background: rgba(8,8,9,0.78);
+    position: relative;
+  }
+  .menu-section::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse 50% 30% at 80% 50%, rgba(192,17,43,0.05) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .menu-tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    justify-content: center;
+    margin-bottom: 3rem;
+  }
+
+  .menu-tab {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 0.85rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 0.5rem 1.2rem;
+    border: 1px solid var(--dark3);
+    background: var(--dark2);
+    color: var(--gray);
+    cursor: pointer;
+    border-radius: 2px;
+    transition: all 0.2s;
+  }
+
+  .menu-tab.active, .menu-tab:hover {
+    background: var(--red);
+    color: var(--white);
+    border-color: var(--red);
+  }
+
+  .menu-panel { display: none; max-width: 1000px; margin: 0 auto; }
+  .menu-panel.active { display: block; }
+
+  .menu-category {
+    margin-bottom: 2.5rem;
+  }
+
+  .menu-category-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 900;
+    font-size: 1.4rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--red);
+    border-bottom: 1px solid var(--dark3);
+    padding-bottom: 0.5rem;
+    margin-bottom: 1.2rem;
+  }
+
+  .menu-items {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 0.8rem;
+  }
+
+  .menu-item {
+    background: var(--dark2);
+    border: 1px solid var(--dark3);
+    padding: 1rem 1.2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 1rem;
+    transition: border-color 0.2s;
+  }
+
+  .menu-item:hover { border-color: rgba(192,17,43,0.4); }
+
+  .menu-item-info { flex: 1; }
+
+  .menu-item-name {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 1rem;
+    color: var(--white);
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    margin-bottom: 0.2rem;
+  }
+
+  .menu-item-desc { font-size: 0.8rem; color: var(--gray); line-height: 1.4; }
+
+  .menu-item-price {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 800;
+    font-size: 1.1rem;
+    color: var(--red);
+    white-space: nowrap;
+  }
+
+  .new-badge {
+    display: inline-block;
+    font-size: 0.6rem;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    background: var(--gold);
+    color: var(--black);
+    padding: 1px 5px;
+    border-radius: 1px;
+    margin-left: 6px;
+    vertical-align: middle;
+  }
+
+  /* COCKTAILS */
+  .cocktails-grid {
+    max-width: 1000px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 0.8rem;
+  }
+
+  .cocktail-card {
+    background: var(--dark2);
+    border: 1px solid var(--dark3);
+    border-left: 3px solid var(--red);
+    padding: 1.2rem;
+    transition: border-left-color 0.2s;
+  }
+
+  .cocktail-card:hover { border-left-color: var(--gold); }
+
+  .cocktail-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.4rem;
+  }
+
+  .cocktail-name {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 800;
+    font-size: 1.05rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--white);
+  }
+
+  .cocktail-price {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 800;
+    font-size: 1.15rem;
+    color: var(--red);
+  }
+
+  .cocktail-ingredients { font-size: 0.8rem; color: var(--gray); line-height: 1.4; }
+
+  /* REVIEWS */
+  .reviews-section {
+    background: rgba(13,13,16,0.75);
+    position: relative;
+  }
+  .reviews-section::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse 60% 40% at 20% 50%, rgba(192,17,43,0.06) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .reviews-grid {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .review-card {
+    background: var(--dark2);
+    border: 1px solid var(--dark3);
+    padding: 1.8rem;
+    position: relative;
+  }
+
+  .review-card::before {
+    content: '"';
+    position: absolute;
+    top: 0.5rem;
+    right: 1rem;
+    font-size: 5rem;
+    line-height: 1;
+    color: rgba(192,17,43,0.15);
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 900;
+    pointer-events: none;
+  }
+
+  .review-stars { color: var(--gold); font-size: 0.95rem; margin-bottom: 0.8rem; }
+
+  .review-text {
+    font-size: 0.9rem;
+    color: var(--light-gray);
+    line-height: 1.65;
+    margin-bottom: 1.2rem;
+    font-style: italic;
+  }
+
+  .review-author {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+  }
+
+  .review-avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: var(--red);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 0.85rem;
+    color: var(--white);
+    flex-shrink: 0;
+  }
+
+  .review-name {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 0.95rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--white);
+  }
+
+  .review-source { font-size: 0.75rem; color: var(--gray); }
+
+  .review-summary {
+    max-width: 700px;
+    margin: 3rem auto 0;
+    text-align: center;
+  }
+
+  .big-rating {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 900;
+    font-size: 5rem;
+    color: var(--white);
+    line-height: 1;
+  }
+
+  .big-rating span { color: var(--red); }
+
+  /* MAP / INFO */
+  .info-section {
+    background: rgba(8,8,9,0.78);
+    position: relative;
+  }
+  .info-section::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse 50% 60% at 50% 100%, rgba(192,17,43,0.07) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .info-layout {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+    align-items: start;
+  }
+
+  @media (max-width: 720px) {
+    .info-layout { grid-template-columns: 1fr; }
+    .nav-links { display: none; }
+    .hero h1 { font-size: 4rem; }
+    .info-strip { gap: 1rem; }
+  }
+
+  .info-block h3 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 800;
+    font-size: 1.4rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--white);
+    margin-bottom: 1.2rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid var(--red);
+  }
+
+  .info-row {
+    display: flex;
+    gap: 0.8rem;
+    align-items: flex-start;
+    padding: 0.7rem 0;
+    border-bottom: 1px solid var(--dark3);
+  }
+
+  .info-row svg { flex-shrink: 0; color: var(--red); margin-top: 2px; }
+
+  .info-row-content { flex: 1; }
+
+  .info-row-label {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 600;
+    font-size: 0.75rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--gray);
+    margin-bottom: 0.1rem;
+  }
+
+  .info-row-value { font-size: 0.95rem; color: var(--white); }
+
+  .schedule-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.6rem 0;
+    border-bottom: 1px solid var(--dark3);
+    font-size: 0.9rem;
+  }
+
+  .schedule-day { color: var(--gray); font-family: 'Barlow Condensed', sans-serif; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; }
+  .schedule-time { color: var(--white); font-weight: 500; }
+
+  .map-placeholder {
+    background: var(--dark2);
+    border: 1px solid var(--dark3);
+    border-radius: 2px;
+    overflow: hidden;
+    height: 280px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    color: var(--gray);
+    font-size: 0.9rem;
+    text-align: center;
+    padding: 1rem;
+  }
+
+  .map-pin-icon { font-size: 2.5rem; }
+
+  .map-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: var(--red);
+    color: var(--white);
+    padding: 0.6rem 1.2rem;
+    border-radius: 2px;
+    text-decoration: none;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 0.9rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-top: 0.5rem;
+    transition: background 0.2s;
+  }
+
+  .map-link:hover { background: var(--red-dark); }
+
+  /* FOOTER */
+  footer {
+    background: rgba(17,17,17,0.85);
+    border-top: 2px solid var(--red);
+    padding: 2.5rem 2rem;
+    text-align: center;
+  }
+
+  .footer-logo {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 900;
+    font-size: 2rem;
+    text-transform: uppercase;
+    color: var(--white);
+    margin-bottom: 0.5rem;
+    letter-spacing: 0.04em;
+  }
+
+  .footer-logo span { color: var(--red); }
+
+  footer p { color: var(--gray); font-size: 0.85rem; }
+
+  .footer-socials {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    margin: 1rem 0;
+  }
+
+  .social-btn {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: var(--dark3);
+    border: 1px solid rgba(255,255,255,0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    color: var(--gray);
+    font-size: 1rem;
+    transition: background 0.2s, color 0.2s;
+  }
+
+  .social-btn:hover { background: var(--red); color: var(--white); border-color: var(--red); }
+
+  /* DRINKS CARD LIST */
+  .drinks-section { background: rgba(26,26,26,0.8); position: relative; }
+
+  .drinks-grid {
+    max-width: 1000px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .drinks-cat {
+    background: var(--dark);
+    border: 1px solid var(--dark3);
+    border-top: 3px solid var(--red);
+    padding: 1.4rem;
+  }
+
+  .drinks-cat h4 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 800;
+    font-size: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--red);
+    margin-bottom: 0.8rem;
+  }
+
+  .drink-line {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding: 0.3rem 0;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    font-size: 0.85rem;
+  }
+
+  .drink-line:last-child { border-bottom: none; }
+
+  .drink-name { color: var(--light-gray); flex: 1; padding-right: 0.5rem; }
+
+
+  /* SPORTS TICKER */
+  .sports-ticker {
+    background: var(--dark);
+    border-top: 1px solid rgba(255,255,255,0.06);
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    overflow: hidden;
+    height: 38px;
+    display: flex;
+    align-items: center;
+  }
+
+  .ticker-label {
+    background: var(--red);
+    color: var(--white);
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 800;
+    font-size: 0.72rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    padding: 0 1rem;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    white-space: nowrap;
+    flex-shrink: 0;
+    z-index: 2;
+  }
+
+  .ticker-track {
+    display: flex;
+    gap: 0;
+    animation: ticker 35s linear infinite;
+    white-space: nowrap;
+    align-items: center;
+  }
+
+  .ticker-track:hover { animation-play-state: paused; }
+
+  @keyframes ticker {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+
+  .ticker-item {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.88rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    color: var(--light-gray);
+    padding: 0 1.8rem;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    border-right: 1px solid rgba(255,255,255,0.07);
+  }
+
+  .ticker-item .score {
+    color: var(--gold-light);
+    font-weight: 800;
+    font-size: 0.95rem;
+  }
+
+  .ticker-live {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    background: var(--red);
+    color: var(--white);
+    font-size: 0.6rem;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    padding: 1px 5px;
+    border-radius: 1px;
+    text-transform: uppercase;
+  }
+
+  .ticker-live::before {
+    content: '';
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: white;
+    display: block;
+    animation: blink 1s ease-in-out infinite;
+  }
+
+  @keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.2; }
+  }
+
+  /* EVENTS SECTION */
+  .events-section { background: rgba(17,17,17,0.78); position: relative; }
+
+  .events-grid {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.2rem;
+  }
+
+  .event-card {
+    background: var(--dark2);
+    border: 1px solid var(--dark3);
+    border-left: 3px solid var(--red);
+    padding: 1.4rem 1.6rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+    position: relative;
+    overflow: hidden;
+    transition: border-left-color 0.2s, transform 0.15s;
+  }
+
+  .event-card:hover {
+    border-left-color: var(--gold);
+    transform: translateY(-2px);
+  }
+
+  .event-card.featured {
+    border-color: var(--gold);
+    border-left-color: var(--gold);
+    border-left-width: 4px;
+  }
+
+  .event-card.featured::after {
+    content: '⚡ DESTACADO';
+    position: absolute;
+    top: 0.7rem;
+    right: 0.8rem;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 800;
+    font-size: 0.6rem;
+    letter-spacing: 0.12em;
+    color: var(--gold);
+  }
+
+  .event-sport {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--red);
+  }
+
+  .event-card.featured .event-sport { color: var(--gold); }
+
+  .event-matchup {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 900;
+    font-size: 1.35rem;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    color: var(--white);
+    line-height: 1.15;
+  }
+
+  .event-meta {
+    display: flex;
+    gap: 1rem;
+    font-size: 0.82rem;
+    color: var(--gray);
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  .event-meta span {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+  }
+
+  /* SCOREBOARD */
+  .scoreboard-section { background: var(--black); }
+
+  .scoreboard-wrap {
+    max-width: 700px;
+    margin: 0 auto;
+    background: var(--dark2);
+    border: 1px solid var(--dark3);
+    border-top: 4px solid var(--red);
+    overflow: hidden;
+    border-radius: 2px;
+  }
+
+  .scoreboard-header {
+    background: var(--dark3);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.7rem 1.5rem;
+  }
+
+  .scoreboard-header-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 800;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--white);
+  }
+
+  .scoreboard-body {
+    padding: 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+
+  .sb-team {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    flex: 1;
+  }
+
+  .sb-team-crest {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: var(--dark3);
+    border: 2px solid rgba(255,255,255,0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.8rem;
+  }
+
+  .sb-team-name {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 800;
+    font-size: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--white);
+    text-align: center;
+  }
+
+  .sb-center {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.3rem;
+  }
+
+  .sb-score {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 900;
+    font-size: 3.5rem;
+    color: var(--white);
+    letter-spacing: -0.02em;
+    line-height: 1;
+  }
+
+  .sb-score span { color: var(--red); }
+
+  .sb-minute {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--gold-light);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  /* HERO extra energy */
+  .hero-bg-anim {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 80% 60% at 50% 60%, rgba(192,17,43,0.22) 0%, transparent 70%),
+      repeating-linear-gradient(0deg, transparent, transparent 60px, rgba(255,255,255,0.012) 60px, rgba(255,255,255,0.012) 61px),
+      repeating-linear-gradient(90deg, transparent, transparent 60px, rgba(255,255,255,0.012) 60px, rgba(255,255,255,0.012) 61px);
+    animation: pulseGlow 4s ease-in-out infinite;
+  }
+
+  @keyframes pulseGlow {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.7; }
+  }
+
+  /* CONTACT BOX UPDATE */
+  .contact-box-phone {
+    margin-top: 0.8rem;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 1.3rem;
+    font-weight: 900;
+    letter-spacing: 0.06em;
+    color: var(--white);
+  }
+
+  .contact-box-phone a {
+    color: var(--gold-light);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .contact-box-phone a:hover { color: var(--gold); }
+
+  /* LANGUAGE SWITCHER */
+  .lang-switcher {
+    display: flex;
+    gap: 0.3rem;
+    align-items: center;
+    border-left: 1px solid rgba(255,255,255,0.1);
+    padding-left: 1rem;
+    margin-left: 0.2rem;
+  }
+
+  .lang-btn {
+    background: transparent;
+    border: 1px solid rgba(255,255,255,0.15);
+    color: var(--gray);
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 0.75rem;
+    letter-spacing: 0.06em;
+    padding: 0.25rem 0.5rem;
+    border-radius: 2px;
+    cursor: pointer;
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+
+  .lang-btn:hover { border-color: var(--red); color: var(--white); }
+  .lang-btn.active { background: var(--red); border-color: var(--red); color: var(--white); }
+
+  /* Google reviews button */
+  .reviews-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    background: var(--red);
+    color: var(--white);
+    padding: 0.75rem 1.8rem;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 1rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    text-decoration: none;
+    border-radius: 2px;
+    margin-top: 1.5rem;
+    transition: background 0.2s, transform 0.15s;
+  }
+  .reviews-cta:hover { background: var(--red-dark); transform: translateY(-2px); }
+
+</style>
+</head>
+<body>
+
+<!-- GLOBAL BACKGROUND CANVAS -->
+<canvas id="bgCanvas"></canvas>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">Mani <span>Sports</span> Bar</div>
+  <ul class="nav-links">
+    <li><a href="#menu" data-i18n="navMenu">Carta</a></li>
+    <li><a href="#eventos" data-i18n="navEvents">Eventos</a></li>
+    <li><a href="#cocktails" data-i18n="navCocktails">Cócteles</a></li>
+    <li><a href="#bebidas" data-i18n="navDrinks">Bebidas</a></li>
+    <li><a href="#reviews" data-i18n="navReviews">Reseñas</a></li>
+    <li><a href="#info" data-i18n="navContact">Contacto</a></li>
+    <li><a href="https://maps.google.com/?q=Av.+Alfredo+Nobel+250,+03183+Torrevieja,+Alicante" target="_blank" class="nav-cta" data-i18n="navDirections">Cómo llegar</a></li>
+    <li class="lang-switcher">
+      <button class="lang-btn active" data-lang="es" onclick="setLang('es')">ES</button>
+      <button class="lang-btn" data-lang="en" onclick="setLang('en')">EN</button>
+      <button class="lang-btn" data-lang="sv" onclick="setLang('sv')">SV</button>
+    </li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="home">
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <div class="hero-eyebrow" data-i18n="heroEyebrow">Torrevieja · Alicante · Desde el primer minuto</div>
+    <h1>MANI<span class="accent">Sports Bar</span></h1>
+    <p class="hero-subtitle" data-i18n="heroSubtitle">Deporte · Gastronomía · Ambiente</p>
+    <div class="hero-rating">
+      <span class="stars">★★★★☆</span>
+      <span style="color: var(--white); font-weight: 600;">4,0</span>
+      <span style="color: var(--gray);" data-i18n="heroRating">(413 reseñas en Google)</span>
+    </div>
+    <div class="hero-cta-group">
+      <a href="#menu" class="btn-primary" data-i18n="heroBtn1">Ver la carta</a>
+      <a href="#info" class="btn-outline" data-i18n="heroBtn2">Cómo llegar</a>
+    </div>
+  </div>
+</section>
+
+<!-- INFO STRIP -->
+<div class="info-strip">
+  <div class="info-item">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+    Abierto hoy: 12:00 – 01:00
+  </div>
+  <div class="info-item">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+    Av. Alfredo Nobel 250, Torrevieja
+  </div>
+  <div class="info-item">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.69 3.4a2 2 0 0 1 1.99-2.18h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L7.91 8.96a16 16 0 0 0 6.29 6.29l1.09-1.09a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+    <a href="tel:646511206" style="color:var(--white);text-decoration:none;font-family:'Barlow Condensed',sans-serif;font-weight:600;font-size:0.95rem;letter-spacing:0.04em;text-transform:uppercase;">646 511 206</a>
+  </div>
+  <div class="info-item">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+    4,0 · 413 Reseñas Google
+  </div>
+</div>
+
+<!-- SPORTS TICKER -->
+<div class="sports-ticker">
+  <div class="ticker-label">🔴 En directo</div>
+  <div class="ticker-track" id="tickerTrack">
+    <!-- Los items se generan automáticamente desde TICKER_PARTIDOS (ver abajo) -->
+  </div>
+</div>
+
+<section class="features-section" id="features">
+  <div class="section-header">
+    <div class="section-label">Por qué elegirnos</div>
+    <h2 class="section-title">El bar que <span>lo tiene todo</span></h2>
+    <div class="divider"></div>
+  </div>
+  <div class="features-grid">
+    <div class="feature-card">
+      <span class="feature-icon">📺</span>
+      <h3>Pantallas gigantes</h3>
+      <p>Todos los partidos en directo con el mejor sonido y las mejores vistas.</p>
+    </div>
+    <div class="feature-card">
+      <span class="feature-icon">🍔</span>
+      <h3>Cocina americana</h3>
+      <p>Hamburguesas artesanas, costillas, nachos y mucho más en nuestra carta.</p>
+    </div>
+    <div class="feature-card">
+      <span class="feature-icon">🍹</span>
+      <h3>Cócteles de autor</h3>
+      <p>Más de 14 cócteles únicos elaborados con ingredientes de primera calidad.</p>
+    </div>
+    <div class="feature-card">
+      <span class="feature-icon">🏆</span>
+      <h3>Ambiente único</h3>
+      <p>El mejor ambiente para ver el deporte con amigos en La Mata.</p>
+    </div>
+    <div class="feature-card">
+      <span class="feature-icon">🍺</span>
+      <h3>Amplia selección</h3>
+      <p>Cervezas nacionales e internacionales, vinos, spirits premium y más.</p>
+    </div>
+  </div>
+</section>
+
+<!-- EVENTS ON SCREEN -->
+<section class="events-section" id="eventos">
+  <div class="section-header">
+    <div class="section-label">Esta semana en nuestras pantallas</div>
+    <h2 class="section-title">Próximos <span>Eventos</span></h2>
+    <div class="divider"></div>
+  </div>
+  <div class="events-grid">
+    <div class="event-card featured">
+      <div class="event-sport">⚽ Champions League · Final</div>
+      <div class="event-matchup">Real Madrid<br>vs PSG</div>
+      <div class="event-meta">
+        <span>📅 Miércoles 21 May</span>
+        <span>⏰ 21:00</span>
+        <span>📺 Pantalla Principal</span>
+      </div>
+    </div>
+    <div class="event-card">
+      <div class="event-sport">⚽ LaLiga · J37</div>
+      <div class="event-matchup">Villarreal<br>vs Valencia</div>
+      <div class="event-meta">
+        <span>📅 Sábado 24 May</span>
+        <span>⏰ 18:30</span>
+        <span>📺 Pantalla 2</span>
+      </div>
+    </div>
+    <div class="event-card">
+      <div class="event-sport">🏀 NBA Playoffs · Conf. Finals</div>
+      <div class="event-matchup">Lakers<br>vs Celtics</div>
+      <div class="event-meta">
+        <span>📅 Viernes 23 May</span>
+        <span>⏰ 02:30</span>
+        <span>📺 Pantalla 3</span>
+      </div>
+    </div>
+    <div class="event-card">
+      <div class="event-sport">🥊 UFC Fight Night</div>
+      <div class="event-matchup">Pereira<br>vs Ankalaev</div>
+      <div class="event-meta">
+        <span>📅 Sábado 24 May</span>
+        <span>⏰ 22:00</span>
+        <span>📺 Pantalla Principal</span>
+      </div>
+    </div>
+    <div class="event-card">
+      <div class="event-sport">🏉 Premier Rugby · Semifinal</div>
+      <div class="event-matchup">Bath<br>vs Sale</div>
+      <div class="event-meta">
+        <span>📅 Domingo 25 May</span>
+        <span>⏰ 15:00</span>
+        <span>📺 Pantalla 2</span>
+      </div>
+    </div>
+    <div class="event-card">
+      <div class="event-sport">⚾ MLB · Sunday Night</div>
+      <div class="event-matchup">Yankees<br>vs Red Sox</div>
+      <div class="event-meta">
+        <span>📅 Domingo 25 May</span>
+        <span>⏰ 21:00</span>
+        <span>📺 Pantalla 3</span>
+      </div>
+    </div>
+  </div>
+  <p style="text-align:center; margin-top:2rem; color:var(--gray); font-size:0.82rem;">La programación puede variar según disponibilidad de señal. Llámanos para confirmar: <a href="tel:646511206" style="color:var(--gold-light);text-decoration:none;font-weight:600;">646 511 206</a></p>
+</section>
+
+<!-- MENU SECTION -->
+<section class="menu-section" id="menu">
+  <div class="section-header">
+    <div class="section-label">Nuestra cocina</div>
+    <h2 class="section-title">La <span>Carta</span></h2>
+    <div class="divider"></div>
+  </div>
+
+  <div class="menu-tabs">
+    <button class="menu-tab active" onclick="showTab('entrantes')">Entrantes</button>
+    <button class="menu-tab" onclick="showTab('ensaladas')">Ensaladas</button>
+    <button class="menu-tab" onclick="showTab('burgers')">Burgers</button>
+    <button class="menu-tab" onclick="showTab('carnes')">Carnes &amp; Pescados</button>
+    <button class="menu-tab" onclick="showTab('pizzas')">Pizzas &amp; Pastas</button>
+    <button class="menu-tab" onclick="showTab('hotdogs')">Hot Dogs</button>
+    <button class="menu-tab" onclick="showTab('postres')">Postres</button>
+    <button class="menu-tab" onclick="showTab('infantil')">Menú Infantil</button>
+  </div>
+
+  <!-- ENTRANTES -->
+  <div class="menu-panel active" id="tab-entrantes">
+    <div class="menu-category">
+      <div class="menu-category-title">Entrantes &amp; Para compartir</div>
+      <div class="menu-items">
+        <div class="menu-item">
+          <div class="menu-item-info">
+            <div class="menu-item-name">Combo Mani Sport <span class="new-badge">Nuevo</span></div>
+            <div class="menu-item-desc">Surtido de alitas, aros de cebolla, croquetas, nachos con chili, fingers de mozzarella, crema agria, guacamole, salsa BBQ.</div>
+          </div>
+          <div class="menu-item-price">25 €</div>
+        </div>
+        <div class="menu-item">
+          <div class="menu-item-info">
+            <div class="menu-item-name">Chicken Fingers <span class="new-badge">Nuevo</span></div>
+            <div class="menu-item-desc">Rebozados en mantequilla de París, con salsa Mani Sport / BBQ / miel mostaza y patatas fritas.</div>
+          </div>
+          <div class="menu-item-price">12 €</div>
+        </div>
+        <div class="menu-item">
+          <div class="menu-item-info">
+            <div class="menu-item-name">Chicago Cheese Fries <span class="new-badge">Nuevo</span></div>
+            <div class="menu-item-desc">Frijoles, jalapeños, queso gratinado, salsa tejana y chili con carne (opcional: nata agria / guacamole).</div>
+          </div>
+          <div class="menu-item-price">18 €</div>
+        </div>
+        <div class="menu-item">
+          <div class="menu-item-info">
+            <div class="menu-item-name">Chicken Wings Rodeo</div>
+            <div class="menu-item-desc">6 alitas maceradas en suave salsa BBQ, con patatas fritas.</div>
+          </div>
+          <div class="menu-item-price">14 €</div>
+        </div>
+        <div class="menu-item">
+          <div class="menu-item-info">
+            <div class="menu-item-name">Chicken Wings Buffalo</div>
+            <div class="menu-item-desc">6 alitas en auténtica salsa búfalo con patatas fritas.</div>
+          </div>
+          <div class="menu-item-price">14 €</div>
+        </div>
+        <div class="menu-item">
+          <div class="menu-item-info">
+            <div class="menu-item-name">Chicken Wings Kansas City</div>
+            <div class="menu-item-desc">6 alitas crujientes con salsa Mani Sport y patatas fritas.</div>
+          </div>
+          <div class="menu-item-price">14 €</div>
+        </div>
+        <div class="menu-item">
+          <div class="menu-item-info">
+            <div class="menu-item-name">Aros de Cebolla</div>
+          </div>
+          <div class="menu-item-price">10 €</div>
+        </div>
+        <div class="menu-item">
+          <div class="menu-item-info">
+            <div class="menu-item-name">Croquetas (6 ud)</div>
+          </div>
+          <div class="menu-item-price">14 €</div>
+        </div>
+        <div class="menu-item">
+          <div class="menu-item-info">
+            <div class="menu-item-name">Huevos Rotos <span class="new-badge">Nuevo</span></div>
+            <div class="menu-item-desc">Con jamón ibérico y pimiento padrón.</div>
+          </div>
+          <div class="menu-item-price">18 €</div>
+        </div>
+        <div class="menu-item">
+          <div class="menu-item-info">
+            <div class="menu-item-name">Nachos California <span class="new-badge">Nuevo</span></div>
+            <div class="menu-item-desc">Jamón ibérico, gamba roja, boletus y parmesano.</div>
+          </div>
+          <div class="menu-item-price">18 €</div>
+        </div>
+        <div class="menu-item">
+          <div class="menu-item-info">
+            <div class="menu-item-name">Fries Bacon &amp; Cheese</div>
+            <div class="menu-item-desc">Patatas fritas, fundido de quesos, salsa mayo, cebolla frita, pulled pork ibérico, beicon ahumado.</div>
+          </div>
+          <div class="menu-item-price">16 €</div>
+        </div>
+        <div class="menu-item">
+          <div class="menu-item-info">
+            <div class="menu-item-name">Oklahoma Cheese Fries <span class="new-badge">Nuevo</span></div>
+            <div class="menu-item-desc">Patatas, fundido de quesos, pico de gallo, jalapeños, chili con carne, salsa ranchera, beicon ahumado, cilantro.</div>
+          </div>
+          <div class="menu-item-price">18 €</div>
+        </div>
+        <div class="menu-item">
+          <div class="menu-item-info">
+            <div class="menu-item-name">Patatas Bravas</div>
+            <div class="menu-item-desc">Salsa especial Mani Sport.</div>
+          </div>
+          <div class="menu-item-price">9 €</div>
+        </div>
+        <div class="menu-item">
+          <div class="menu-item-info">
+            <div class="menu-item-name">Ración de Patatas Fritas</div>
+          </div>
+          <div class="menu-item-price">6 €</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ENSALADAS -->
+  <div class="menu-panel" id="tab-ensaladas">
+    <div class="menu-category">
+      <div class="menu-category-title">Ensaladas</div>
+      <div class="menu-items">
+        <div class="menu-item">
+          <div class="menu-item-info">
+            <div class="menu-item-name">César</div>
+            <div class="menu-item-desc">200g de tiras de pollo crujiente, tomate, huevo, parmesano, picatostes, rúcula, lechuga, salsa césar.</div>
+          </div>
+          <div class="menu-item-price">15 €</div>
+        </div>
+        <div class="menu-item">
+          <div class="menu-item-info">
+            <div class="menu-item-name">Ángeles Lakers</div>
+            <div class="menu-item-desc">Aguacate, mango, fresa, queso feta, tomate cherry, cebolla roja, nueces, lechuga gourmet, vinagreta.</div>
+          </div>
+          <div class="menu-item-price">16 €</div>
+        </div>
+        <div class="menu-item">
+          <div class="menu-item-info">
+            <div class="menu-item-name">Mani Sport</div>
+            <div class="menu-item-desc">Mozzarella búfala, espárragos, aguacate, zanahoria, huevo cocido, maíz, cebolla, rúcula, lechuga gourmet.</div>
+          </div>
+          <div class="menu-item-price">16 €</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BURGERS -->
+  <div class="menu-panel" id="tab-burgers">
+    <div class="menu-category">
+      <div class="menu-category-title">Burgers de Pollo</div>
+      <div class="menu-items">
+        <div class="menu-item">
+          <div class="menu-item-info"><div class="menu-item-name">Clásico</div><div class="menu-item-desc">150g pollo crujiente, tomate, queso cheddar, lechuga gourmet.</div></div>
+          <div class="menu-item-price">14 €</div>
+        </div>
+        <div class="menu-item">
+          <div class="menu-item-info"><div class="menu-item-name">Manquepierde</div><div class="menu-item-desc">150g pollo crujiente, queso cheddar, beicon, cebolla, huevo frito.</div></div>
+          <div class="menu-item-price">16 €</div>
+        </div>
+        <div class="menu-item">
+          <div class="menu-item-info"><div class="menu-item-name">Colchonera</div><div class="menu-item-desc">150g pollo crujiente, beicon, queso cheddar, tomate, aros de cebolla.</div></div>
+          <div class="menu-item-price">15 €</div>
+        </div>
+        <div class="menu-item">
+          <div class="menu-item-info"><div class="menu-item-name">La Roja <span class="new-badge">Nuevo</span></div><div class="menu-item-desc">120g ternera, queso cheddar, tomate, lechuga gourmet.</div></div>
+          <div class="menu-item-price">16 €</div>
+        </div>
+      </div>
+    </div>
+    <div class="menu-category">
+      <div class="menu-category-title">Burgers de Ternera &amp; Buey</div>
+      <div class="menu-items">
+        <div class="menu-item">
+          <div class="menu-item-info"><div class="menu-item-name">Mani Sport</div><div class="menu-item-desc">200g ternera, beicon, cebolla, queso cheddar, huevo frito, salsa mani.</div></div>
+          <div class="menu-item-price">18 €</div>
+        </div>
+        <div class="menu-item">
+          <div class="menu-item-info"><div class="menu-item-name">Hoyo 18</div><div class="menu-item-desc">120g ternera, queso cheddar, beicon, champiñón a la plancha, cebolla caramelizada.</div></div>
+          <div class="menu-item-price">17 €</div>
+        </div>
+        <div class="menu-item">
+          <div class="menu-item-info"><div class="menu-item-name">Súper Bowl</div><div class="menu-item-desc">200g ternera, mermelada de beicon, tomate, queso cheddar ahumado, lechuga gourmet.</div></div>
+          <div class="menu-item-price">19 €</div>
+        </div>
+        <div class="menu-item">
+          <div class="menu-item-info"><div class="menu-item-name">Tres Leones <span class="new-badge">Nuevo</span></div><div class="menu-item-desc">200g angus de Aberdeen, cheddar añejo británico, cebolla roja, champiñón, beicon ahumado en madera de haya, pepinillo, salsa Worcester, pan New York rolls.</div></div>
+          <div class="menu-item-price">24 €</div>
+        </div>
+        <div class="menu-item">
+          <div class="menu-item-info"><div class="menu-item-name">Sincronizada <span class="new-badge">Nuevo</span></div><div class="menu-item-desc">200g ternera, doble queso cheddar, doble beicon, cebolla roja crujiente sobre salsa cheddar.</div></div>
+          <div class="menu-item-price">20 €</div>
+        </div>
+        <div class="menu-item">
+          <div class="menu-item-info"><div class="menu-item-name">La Scaloneta <span class="new-badge">Nuevo</span></div><div class="menu-item-desc">200g ternera, beicon, queso cheddar, cebolla roja, tomate, salsa Jack Daniel's.</div></div>
+          <div class="menu-item-price">20 €</div>
+        </div>
+        <div class="menu-item">
+          <div class="menu-item-info"><div class="menu-item-name">La Mamba Negra</div><div class="menu-item-desc">200g angus americano, beicon ahumado, queso Monterrey Jack, cebolla roja, salsa coreana.</div></div>
+          <div class="menu-item-price">24 €</div>
+        </div>
+        <div class="menu-item">
+          <div class="menu-item-info"><div class="menu-item-name">París Dakar</div><div class="menu-item-desc">200g buey, beicon, queso cheddar, cebolla roja, tomate, salsa Jack Daniel's.</div></div>
+          <div class="menu-item-price">22 €</div>
+        </div>
+        <div class="menu-item">
+          <div class="menu-item-info"><div class="menu-item-name">Tres Coronas <span class="new-badge">Nuevo</span></div><div class="menu-item-desc">200g buey, queso cheddar, fingers de mozzarella, beicon, tomate.</div></div>
+          <div class="menu-item-price">20 €</div>
+        </div>
+        <div class="menu-item">
+          <div class="menu-item-info"><div class="menu-item-name">¿Décimosexta?</div><div class="menu-item-desc">150g pulled pork ibérico, cebolla roja, 180g tortilla de patatas, queso havarti y suave salsa de beicon.</div></div>
+          <div class="menu-item-price">18 €</div>
+        </div>
+        <div class="menu-item">
+          <div class="menu-item-info"><div class="menu-item-name">Dream Team</div><div class="menu-item-desc">200g ternera, tomate confitado, gofre relleno de queso cheddar, crujiente de lotus, cebolla caramelizada, beicon.</div></div>
+          <div class="menu-item-price">24 €</div>
+        </div>
+        <div class="menu-item">
+          <div class="menu-item-info"><div class="menu-item-name">6 Naciones</div><div class="menu-item-desc">200g angus macerada al Black Label, queso cheddar, beicon, pepinillos, aros de cebolla a la Guinness.</div></div>
+          <div class="menu-item-price">22 €</div>
+        </div>
+        <div class="menu-item">
+          <div class="menu-item-info"><div class="menu-item-name">All Blacks</div><div class="menu-item-desc">200g angus americano, guacamole, beicon ahumado, queso Monterrey Jack, crujiente de nachos.</div></div>
+          <div class="menu-item-price">24 €</div>
+        </div>
+        <div class="menu-item">
+          <div class="menu-item-info"><div class="menu-item-name">La Perla Negra</div><div class="menu-item-desc">200g angus americano macerada en salsa habanera, beicon, jalapeños, salsa pirata.</div></div>
+          <div class="menu-item-price">24 €</div>
+        </div>
+        <div class="menu-item">
+          <div class="menu-item-info"><div class="menu-item-name">Oliver y Benji <span class="new-badge">Nuevo</span></div><div class="menu-item-desc">200g retinto (Extremadura), jamón ibérico, tomate, rúcula y parmesano.</div></div>
+          <div class="menu-item-price">20 €</div>
+        </div>
+        <div class="menu-item">
+          <div class="menu-item-info"><div class="menu-item-name">El Tiburón de Baltimore</div><div class="menu-item-desc">200g buey, beicon ahumado, queso americano, tomate confitado, huevo frito.</div></div>
+          <div class="menu-item-price">22 €</div>
+        </div>
+        <div class="menu-item">
+          <div class="menu-item-info"><div class="menu-item-name">El Chico de Belfast <span class="new-badge">Nuevo</span></div><div class="menu-item-desc">200g novillo irlandés, beicon madurado en madera de haya, queso cheddar ahumado, aros de cebolla, tomate, pepinillo laminado.</div></div>
+          <div class="menu-item-price">22 €</div>
+        </div>
+      </div>
+    </div>
+    <div class="menu-category">
+      <div class="menu-category-title">Big &amp; Especiales</div>
+      <div class="menu-items">
+        <div class="menu-item">
+          <div class="menu-item-info"><div class="menu-item-name">La Scaloneta XL</div><div class="menu-item-desc">Pan XXL, mix de quesos, pulled pork ibérico, pico de gallo, patatas fritas.</div></div>
+          <div class="menu-item-price">20 €</div>
+        </div>
+        <div class="menu-item">
+          <div class="menu-item-info"><div class="menu-item-name">Melé (Salpichapa)</div><div class="menu-item-desc">6 mini-hamburguesas, salsa cheddar, 4 nuggets, pelotazos.</div></div>
+          <div class="menu-item-price">18 €</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CARNES & PESCADOS -->
+  <div class="menu-panel" id="tab-carnes">
+    <div class="menu-category">
+      <div class="menu-category-title">Carnes</div>
+      <div class="menu-items">
+        <div class="menu-item">
+          <div class="menu-item-info"><div class="menu-item-name">Costillar a la BBQ (600g)</div><div class="menu-item-desc">Patatas fritas, ensalada de col, aros de cebolla.</div></div>
+          <div class="menu-item-price">22 €</div>
+        </div>
+        <div class="menu-item">
+          <div class="menu-item-info"><div class="menu-item-name">Codillo Braseado (400g)</div><div class="menu-item-desc">Con base de parmentier de patata.</div></div>
+          <div class="menu-item-price">22 €</div>
+        </div>
+        <div class="menu-item">
+          <div class="menu-item-info"><div class="menu-item-name">Brochetas de Pollo <span class="new-badge">Nuevo</span></div><div class="menu-item-desc">Al aroma de ajillo, huevo, patatas fritas.</div></div>
+          <div class="menu-item-price">15 €</div>
+        </div>
+        <div class="menu-item">
+          <div class="menu-item-info"><div class="menu-item-name">Pollo al Curry (250g) <span class="new-badge">Nuevo</span></div><div class="menu-item-desc">Acompañado de arroz, piña y patatas fritas.</div></div>
+          <div class="menu-item-price">16 €</div>
+        </div>
+        <div class="menu-item">
+          <div class="menu-item-info"><div class="menu-item-name">Cordon Bleu <span class="new-badge">Nuevo</span></div><div class="menu-item-desc">Ensalada fresca, croquetas, patatas fritas.</div></div>
+          <div class="menu-item-price">18 €</div>
+        </div>
+      </div>
+    </div>
+    <div class="menu-category">
+      <div class="menu-category-title">Pescados</div>
+      <div class="menu-items">
+        <div class="menu-item">
+          <div class="menu-item-info"><div class="menu-item-name">Emperador a la Plancha (320g) <span class="new-badge">Nuevo</span></div><div class="menu-item-desc">Crujiente de verduras, patatas.</div></div>
+          <div class="menu-item-price">18 €</div>
+        </div>
+        <div class="menu-item">
+          <div class="menu-item-info"><div class="menu-item-name">Rodaja de Salmón a la Plancha <span class="new-badge">Nuevo</span></div><div class="menu-item-desc">Verduras, patatas, aroma de eneldo.</div></div>
+          <div class="menu-item-price">16 €</div>
+        </div>
+        <div class="menu-item">
+          <div class="menu-item-info"><div class="menu-item-name">Lomo de Bacalao (250g) <span class="new-badge">Nuevo</span></div><div class="menu-item-desc">Cocinado en su jugo a baja temperatura.</div></div>
+          <div class="menu-item-price">18 €</div>
+        </div>
+        <div class="menu-item">
+          <div class="menu-item-info"><div class="menu-item-name">Tagliatelle Fruto di Mare</div><div class="menu-item-desc">Gambas, mejillones, calamares, bocas de mar.</div></div>
+          <div class="menu-item-price">15 €</div>
+        </div>
+      </div>
+    </div>
+    <div class="menu-category">
+      <div class="menu-category-title">Sándwiches</div>
+      <div class="menu-items">
+        <div class="menu-item">
+          <div class="menu-item-info"><div class="menu-item-name">Escandinavo <span class="new-badge">Nuevo</span></div><div class="menu-item-desc">Salmón ahumado, aguacate, mango, tomate, cebolla, eneldo, mayonesa, ensalada de col.</div></div>
+          <div class="menu-item-price">12 €</div>
+        </div>
+        <div class="menu-item">
+          <div class="menu-item-info"><div class="menu-item-name">Mani Sport</div><div class="menu-item-desc">Pechuga de pollo a la parrilla, beicon, tomate, lechuga, salsa césar.</div></div>
+          <div class="menu-item-price">6 €</div>
+        </div>
+        <div class="menu-item">
+          <div class="menu-item-info"><div class="menu-item-name">Britania</div><div class="menu-item-desc">Pan de molde a la plancha, mantequilla, queso, jamón cocido, patatas fritas.</div></div>
+          <div class="menu-item-price">8 €</div>
+        </div>
+        <div class="menu-item">
+          <div class="menu-item-info"><div class="menu-item-name">De Totti <span class="new-badge">Nuevo</span></div><div class="menu-item-desc">Beicon a la plancha, cebolla, huevo frito, patatas.</div></div>
+          <div class="menu-item-price">9 €</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PIZZAS & PASTAS -->
+  <div class="menu-panel" id="tab-pizzas">
+    <div class="menu-category">
+      <div class="menu-category-title">Pizzas <small style="font-size:0.7rem; color: var(--gray); font-weight:400; text-transform:none;">(todas llevan tomate y mozzarella)</small></div>
+      <div class="menu-items">
+        <div class="menu-item">
+          <div class="menu-item-info"><div class="menu-item-name">Margarita</div><div class="menu-item-desc">Tomate, mozzarella.</div></div>
+          <div class="menu-item-price">12 €</div>
+        </div>
+        <div class="menu-item">
+          <div class="menu-item-info"><div class="menu-item-name">Hawaii</div><div class="menu-item-desc">Jamón york, piña.</div></div>
+          <div class="menu-item-price">14 €</div>
+        </div>
+        <div class="menu-item">
+          <div class="menu-item-info"><div class="menu-item-name">Diablo</div><div class="menu-item-desc">Cebolla, salami, pepperoni picante, guindillas.</div></div>
+          <div class="menu-item-price">15 €</div>
+        </div>
+        <div class="menu-item">
+          <div class="menu-item-info"><div class="menu-item-name">Barbacoa</div><div class="menu-item-desc">Pulled pork ibérico, cebolla, beicon crujiente, BBQ.</div></div>
+          <div class="menu-item-price">16 €</div>
+        </div>
+        <div class="menu-item">
+          <div class="menu-item-info"><div class="menu-item-name">5 Quesos</div><div class="menu-item-desc">Mozzarella, emmental, azul, edam, parmesano.</div></div>
+          <div class="menu-item-price">15 €</div>
+        </div>
+      </div>
+    </div>
+    <div class="menu-category">
+      <div class="menu-category-title">Pastas</div>
+      <div class="menu-items">
+        <div class="menu-item">
+          <div class="menu-item-info"><div class="menu-item-name">Espaguetis Carbonara / Boloñesa</div></div>
+          <div class="menu-item-price">14 €</div>
+        </div>
+        <div class="menu-item">
+          <div class="menu-item-info"><div class="menu-item-name">Lasaña Boloñesa (350g)</div></div>
+          <div class="menu-item-price">16 €</div>
+        </div>
+        <div class="menu-item">
+          <div class="menu-item-info"><div class="menu-item-name">Tagliatelle Fruto di Mare</div><div class="menu-item-desc">Gambas, mejillones, calamares, bocas de mar.</div></div>
+          <div class="menu-item-price">15 €</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- HOT DOGS -->
+  <div class="menu-panel" id="tab-hotdogs">
+    <div class="menu-category">
+      <div class="menu-category-title">Hot Dogs &amp; Salchipapa</div>
+      <div class="menu-items">
+        <div class="menu-item">
+          <div class="menu-item-info"><div class="menu-item-name">Hot Dog</div><div class="menu-item-desc">Salchicha 20cm, mostaza, kétchup, cebolla crujiente, patatas fritas.</div></div>
+          <div class="menu-item-price">12 €</div>
+        </div>
+        <div class="menu-item">
+          <div class="menu-item-info"><div class="menu-item-name">Hot Dog Mara</div><div class="menu-item-desc">Salchicha 28cm, queso fundido, cebolla crujiente.</div></div>
+          <div class="menu-item-price">14 €</div>
+        </div>
+        <div class="menu-item">
+          <div class="menu-item-info"><div class="menu-item-name">Sotomayor</div><div class="menu-item-desc">Patatas fritas, mix de quesos, cebolla crujiente, salchicha XXL, todo gratinado al horno.</div></div>
+          <div class="menu-item-price">16 €</div>
+        </div>
+        <div class="menu-item">
+          <div class="menu-item-info"><div class="menu-item-name">Melé (Salchipapa)</div><div class="menu-item-desc">6 mini-hamburguesas, salsa cheddar, 4 nuggets, pelotazos.</div></div>
+          <div class="menu-item-price">18 €</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- POSTRES -->
+  <div class="menu-panel" id="tab-postres">
+    <div class="menu-category">
+      <div class="menu-category-title">Postres</div>
+      <div class="menu-items">
+        <div class="menu-item">
+          <div class="menu-item-info"><div class="menu-item-name">Coulant de Chocolate con Helado</div></div>
+          <div class="menu-item-price">8 €</div>
+        </div>
+        <div class="menu-item">
+          <div class="menu-item-info"><div class="menu-item-name">Tarta (consultar camarero/a)</div></div>
+          <div class="menu-item-price">6 €</div>
+        </div>
+        <div class="menu-item">
+          <div class="menu-item-info"><div class="menu-item-name">Profiteroles (sirope a elegir)</div></div>
+          <div class="menu-item-price">7 €</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- INFANTIL -->
+  <div class="menu-panel" id="tab-infantil">
+    <div class="menu-category">
+      <div class="menu-category-title">Menú Infantil (0-12 años)</div>
+      <p style="color: var(--gray); font-size: 0.9rem; margin-bottom: 1.5rem;">Incluye agua o refresco.</p>
+      <div class="menu-items">
+        <div class="menu-item"><div class="menu-item-info"><div class="menu-item-name">Hamburguesa de Ternera</div><div class="menu-item-desc">Con queso, tomate y patatas fritas.</div></div><div class="menu-item-price">10 €</div></div>
+        <div class="menu-item"><div class="menu-item-info"><div class="menu-item-name">Hamburguesa de Pollo</div><div class="menu-item-desc">Con queso, tomate y patatas fritas.</div></div><div class="menu-item-price">10 €</div></div>
+        <div class="menu-item"><div class="menu-item-info"><div class="menu-item-name">Pizza Margarita</div></div><div class="menu-item-price">10 €</div></div>
+        <div class="menu-item"><div class="menu-item-info"><div class="menu-item-name">Nuggets de Pollo</div><div class="menu-item-desc">Con patatas fritas.</div></div><div class="menu-item-price">10 €</div></div>
+        <div class="menu-item"><div class="menu-item-info"><div class="menu-item-name">Sándwich Mixto</div><div class="menu-item-desc">Con patatas fritas.</div></div><div class="menu-item-price">10 €</div></div>
+      </div>
+    </div>
+  </div>
+
+</section>
+
+<!-- COCKTAILS -->
+<section style="background: var(--dark); padding: 5rem 2rem;" id="cocktails">
+  <div class="section-header">
+    <div class="section-label">Bartenders de autor</div>
+    <h2 class="section-title">Nuestros <span>Cócteles</span></h2>
+    <div class="divider"></div>
+  </div>
+  <div class="cocktails-grid">
+    <div class="cocktail-card">
+      <div class="cocktail-header"><div class="cocktail-name">Mojito</div><div class="cocktail-price">9 €</div></div>
+      <div class="cocktail-ingredients">Ron Havana 3, sirope simple, hierbabuena, lima, soda.</div>
+    </div>
+    <div class="cocktail-card">
+      <div class="cocktail-header"><div class="cocktail-name">Piña Colada</div><div class="cocktail-price">10 €</div></div>
+      <div class="cocktail-ingredients">Ron Bacardi, crema de coco, piña natural.</div>
+    </div>
+    <div class="cocktail-card">
+      <div class="cocktail-header"><div class="cocktail-name">Sex on the Beach</div><div class="cocktail-price">10 €</div></div>
+      <div class="cocktail-ingredients">Vodka Absolut, puré de fresa, puré de melocotón, granadina, zumo de naranja natural.</div>
+    </div>
+    <div class="cocktail-card">
+      <div class="cocktail-header"><div class="cocktail-name">Daiquiri Frozzen</div><div class="cocktail-price">10 €</div></div>
+      <div class="cocktail-ingredients">Ron Bacardi, puré de fresa, lima.</div>
+    </div>
+    <div class="cocktail-card">
+      <div class="cocktail-header"><div class="cocktail-name">Pornstar Martini</div><div class="cocktail-price">12 €</div></div>
+      <div class="cocktail-ingredients">Vodka Absolut, puré de maracuyá, vainilla, lima, clara de huevo.</div>
+    </div>
+    <div class="cocktail-card">
+      <div class="cocktail-header"><div class="cocktail-name">Espresso Martini</div><div class="cocktail-price">10 €</div></div>
+      <div class="cocktail-ingredients">Vodka Absolut, café, licor de café, vanilla.</div>
+    </div>
+    <div class="cocktail-card">
+      <div class="cocktail-header"><div class="cocktail-name">1966</div><div class="cocktail-price">12 €</div></div>
+      <div class="cocktail-ingredients">Ginebra Hendrick's, mango picante, sirope de palomitas, lima, schweppes de limón.</div>
+    </div>
+    <div class="cocktail-card">
+      <div class="cocktail-header"><div class="cocktail-name">El Quinto Beatle</div><div class="cocktail-price">10 €</div></div>
+      <div class="cocktail-ingredients">Vodka Absolut, crema de coco, chocolate blanco.</div>
+    </div>
+    <div class="cocktail-card">
+      <div class="cocktail-header"><div class="cocktail-name">Seis Naciones</div><div class="cocktail-price">10 €</div></div>
+      <div class="cocktail-ingredients">Ron Bacardi, kiwi, fresa, lima, zumo de naranja.</div>
+    </div>
+    <div class="cocktail-card">
+      <div class="cocktail-header"><div class="cocktail-name">Margarita</div><div class="cocktail-price">10 €</div></div>
+      <div class="cocktail-ingredients">Tequila José Cuervo, triple seco, lima.</div>
+    </div>
+    <div class="cocktail-card">
+      <div class="cocktail-header"><div class="cocktail-name">Mani Thai</div><div class="cocktail-price">12 €</div></div>
+      <div class="cocktail-ingredients">Ron Capitán Morgan, ron Bacardi, sirope de almendra, piña natural, zumo de naranja.</div>
+    </div>
+    <div class="cocktail-card">
+      <div class="cocktail-header"><div class="cocktail-name">Long Island Iced Tea</div><div class="cocktail-price">12 €</div></div>
+      <div class="cocktail-ingredients">Ron Bacardi, Vodka Absolut, tequila José Cuervo, ginebra Beefeater, triple seco, lima, cola.</div>
+    </div>
+    <div class="cocktail-card">
+      <div class="cocktail-header"><div class="cocktail-name">Aperol Sport</div><div class="cocktail-price">12 €</div></div>
+      <div class="cocktail-ingredients">Aperol, brandy Soberano, zumo de melocotón, romero, cava, clara de huevo.</div>
+    </div>
+  </div>
+</section>
+
+<!-- BEBIDAS -->
+<section class="drinks-section" id="bebidas">
+  <div class="section-header">
+    <div class="section-label">Carta de Bebidas</div>
+    <h2 class="section-title">Bebidas &amp; <span>Bodega</span></h2>
+    <div class="divider"></div>
+  </div>
+  <div class="drinks-grid">
+    <div class="drinks-cat">
+      <h4>🍺 Cervezas</h4>
+      <div class="drink-line"><span class="drink-name">Caña / Clara / Sandy</span><span class="drink-price">2,20 €</span></div>
+      <div class="drink-line"><span class="drink-name">⅓ Estrella Levante / SIN</span><span class="drink-price">2,80 €</span></div>
+      <div class="drink-line"><span class="drink-name">⅓ Mahou 5 / Tostada</span><span class="drink-price">3,00 €</span></div>
+      <div class="drink-line"><span class="drink-name">Verna / Heineken / Coronita</span><span class="drink-price">4,00 €</span></div>
+      <div class="drink-line"><span class="drink-name">Alhambra 1925 / 1906</span><span class="drink-price">4,50 €</span></div>
+      <div class="drink-line"><span class="drink-name">Guinness 0,5L</span><span class="drink-price">5,00 €</span></div>
+      <div class="drink-line"><span class="drink-name">Tanque / Pinta 1L</span><span class="drink-price">4,50 / 8,50 €</span></div>
+      <div class="drink-line"><span class="drink-name">Smirnoff Ice</span><span class="drink-price">4,50 €</span></div>
+    </div>
+    <div class="drinks-cat">
+      <h4>🥃 Gin</h4>
+      <div class="drink-line"><span class="drink-name">Larios / Seegrams (Comb.)</span><span class="drink-price">6,50 €</span></div>
+      <div class="drink-line"><span class="drink-name">Beefeater / Tanqueray</span><span class="drink-price">8,00 €</span></div>
+      <div class="drink-line"><span class="drink-name">Bombay Sapphire (Comb.)</span><span class="drink-price">9,50 €</span></div>
+      <div class="drink-line"><span class="drink-name">P. de Indias (Comb.)</span><span class="drink-price">8,50 €</span></div>
+      <div class="drink-line"><span class="drink-name">— Gin Premium —</span><span class="drink-price"></span></div>
+      <div class="drink-line"><span class="drink-name">G'Vine / BullDog</span><span class="drink-price">10 €</span></div>
+      <div class="drink-line"><span class="drink-name">Martin Miller's</span><span class="drink-price">10 €</span></div>
+      <div class="drink-line"><span class="drink-name">Nordés / Citadelle</span><span class="drink-price">11 €</span></div>
+      <div class="drink-line"><span class="drink-name">The London / Hendricks</span><span class="drink-price">11 €</span></div>
+      <div class="drink-line"><span class="drink-name">BrockMans</span><span class="drink-price">10 €</span></div>
+    </div>
+    <div class="drinks-cat">
+      <h4>🥃 Whisky</h4>
+      <div class="drink-line"><span class="drink-name">DYC / JB (Copa)</span><span class="drink-price">3,50 €</span></div>
+      <div class="drink-line"><span class="drink-name">Ballantine's / White Label</span><span class="drink-price">8,00 €</span></div>
+      <div class="drink-line"><span class="drink-name">Jack Daniels</span><span class="drink-price">9,50 €</span></div>
+      <div class="drink-line"><span class="drink-name">Red Label / Jameson</span><span class="drink-price">8,00 €</span></div>
+      <div class="drink-line"><span class="drink-name">Black Label</span><span class="drink-price">9,50 €</span></div>
+      <div class="drink-line"><span class="drink-name">— Premium —</span><span class="drink-price"></span></div>
+      <div class="drink-line"><span class="drink-name">Tomatín / Double Black</span><span class="drink-price">10 €</span></div>
+      <div class="drink-line"><span class="drink-name">The Macallan 12</span><span class="drink-price">18 €</span></div>
+      <div class="drink-line"><span class="drink-name">Glenfiddich 12</span><span class="drink-price">20 €</span></div>
+      <div class="drink-line"><span class="drink-name">Blue Label</span><span class="drink-price">40 €</span></div>
+    </div>
+    <div class="drinks-cat">
+      <h4>🍹 Ron &amp; Vodka</h4>
+      <div class="drink-line"><span class="drink-name">Bacardi / Cacique (Comb.)</span><span class="drink-price">6,50 €</span></div>
+      <div class="drink-line"><span class="drink-name">Brugal / Legendario</span><span class="drink-price">7,50 €</span></div>
+      <div class="drink-line"><span class="drink-name">Barceló / Captain Morgan</span><span class="drink-price">8,00 €</span></div>
+      <div class="drink-line"><span class="drink-name">Havana 7</span><span class="drink-price">8,50 €</span></div>
+      <div class="drink-line"><span class="drink-name">Zacapa 23 (Comb.)</span><span class="drink-price">12,00 €</span></div>
+      <div class="drink-line"><span class="drink-name">Zacapa XO (Copa)</span><span class="drink-price">24,00 €</span></div>
+      <div class="drink-line"><span class="drink-name">— Vodka —</span><span class="drink-price"></span></div>
+      <div class="drink-line"><span class="drink-name">Smirnoff (Comb.)</span><span class="drink-price">5 €</span></div>
+      <div class="drink-line"><span class="drink-name">Absolut (Comb.)</span><span class="drink-price">6 €</span></div>
+      <div class="drink-line"><span class="drink-name">Belvedere</span><span class="drink-price">14,00 €</span></div>
+    </div>
+    <div class="drinks-cat">
+      <h4>🍷 Vinos &amp; Bodega</h4>
+      <div class="drink-line"><span class="drink-name">Tintos: Abadía Roble, Davalillo...</span><span class="drink-price">2,80€/14€</span></div>
+      <div class="drink-line"><span class="drink-name">Juan Gil (4 meses)</span><span class="drink-price">18 €</span></div>
+      <div class="drink-line"><span class="drink-name">Marqués de Cáceres</span><span class="drink-price">18 €</span></div>
+      <div class="drink-line"><span class="drink-name">Blancos: Abadía, Protos...</span><span class="drink-price">2,80€/14€</span></div>
+      <div class="drink-line"><span class="drink-name">Rosados: Fruto Noble, Gran Feudo</span><span class="drink-price">16-18 €</span></div>
+      <div class="drink-line"><span class="drink-name">Cava Jaume Serra / Freixenet</span><span class="drink-price">14-16 €</span></div>
+      <div class="drink-line"><span class="drink-name">Moët & Chandon / Brut</span><span class="drink-price">75 €</span></div>
+      <div class="drink-line"><span class="drink-name">Sangría 0,5L / 1L</span><span class="drink-price">8 / 15 €</span></div>
+      <div class="drink-line"><span class="drink-name">Tinto Verano 0,5L</span><span class="drink-price">5 €</span></div>
+    </div>
+    <div class="drinks-cat">
+      <h4>🧃 Sin alcohol &amp; Refrescos</h4>
+      <div class="drink-line"><span class="drink-name">Coca-Cola / Zero</span><span class="drink-price">3,00 €</span></div>
+      <div class="drink-line"><span class="drink-name">Fanta / Aquarius / Nestea</span><span class="drink-price">3,00 €</span></div>
+      <div class="drink-line"><span class="drink-name">Tónica / Bitter Kas / 7UP</span><span class="drink-price">3,00 €</span></div>
+      <div class="drink-line"><span class="drink-name">Zumos</span><span class="drink-price">2,50 €</span></div>
+      <div class="drink-line"><span class="drink-name">Batido de Chocolate</span><span class="drink-price">2,50 €</span></div>
+      <div class="drink-line"><span class="drink-name">Agua 0,33cl</span><span class="drink-price">1,50 €</span></div>
+      <div class="drink-line"><span class="drink-name">Kopparberg Mixed Fruit</span><span class="drink-price">5,00 €</span></div>
+      <div class="drink-line"><span class="drink-name">Magners</span><span class="drink-price">5,50 €</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- REVIEWS -->
+<section class="reviews-section" id="reviews">
+  <div class="section-header">
+    <div class="section-label">Lo que dicen nuestros clientes</div>
+    <h2 class="section-title">Reseñas <span>Google</span></h2>
+    <div class="divider"></div>
+  </div>
+  <div class="reviews-grid">
+    <div class="review-card">
+      <div class="review-stars">★★★★★</div>
+      <p class="review-text">Lugar increíble para ver el fútbol. Pantallas enormes, muy buen sonido y el ambiente es brutal. Las hamburguesas son de 10 y la carta de cócteles sorprende. El personal súper atento siempre.</p>
+      <div class="review-author">
+        <div class="review-avatar">JM</div>
+        <div>
+          <div class="review-name">José Manuel R.</div>
+          <div class="review-source">Google · hace 2 semanas</div>
+        </div>
+      </div>
+    </div>
+    <div class="review-card">
+      <div class="review-stars">★★★★★</div>
+      <p class="review-text">Vine con unos amigos a ver la Champions y nos quedamos toda la noche. La comida es espectacular, especialmente las Tres Leones y el Costillar BBQ. El Mani Thai es el mejor cóctel de la zona.</p>
+      <div class="review-author">
+        <div class="review-avatar">AL</div>
+        <div>
+          <div class="review-name">Ana L.</div>
+          <div class="review-source">Google · hace 1 mes</div>
+        </div>
+      </div>
+    </div>
+    <div class="review-card">
+      <div class="review-stars">★★★★☆</div>
+      <p class="review-text">Muy buen sitio, la carta de hamburguesas es extensa y de calidad. Los fines de semana se llena mucho pero vale la pena esperar. El ambiente de sports bar es auténtico. Volveré seguro.</p>
+      <div class="review-author">
+        <div class="review-avatar">CR</div>
+        <div>
+          <div class="review-name">Carlos R.</div>
+          <div class="review-source">Google · hace 3 semanas</div>
+        </div>
+      </div>
+    </div>
+    <div class="review-card">
+      <div class="review-stars">★★★★★</div>
+      <p class="review-text">Lo mejor de La Mata para ver el deporte. Pedí el Long Island Iced Tea y estaba para repetir. Las patatas Chicago Cheese Fries son una locura. Personal muy agradable y servicio rápido.</p>
+      <div class="review-author">
+        <div class="review-avatar">MP</div>
+        <div>
+          <div class="review-name">María P.</div>
+          <div class="review-source">Google · hace 5 días</div>
+        </div>
+      </div>
+    </div>
+    <div class="review-card">
+      <div class="review-stars">★★★★☆</div>
+      <p class="review-text">Sitio perfecto para una noche con amigos. Las pantallas siempre con el mejor deporte, la carta de vinos es mejor de lo que esperas en un sports bar y las pizzas estaban muy ricas.</p>
+      <div class="review-author">
+        <div class="review-avatar">DG</div>
+        <div>
+          <div class="review-name">David G.</div>
+          <div class="review-source">Google · hace 2 meses</div>
+        </div>
+      </div>
+    </div>
+    <div class="review-card">
+      <div class="review-stars">★★★★★</div>
+      <p class="review-text">Vine de vacaciones y encontré este bar por casualidad. Probé el Pornstar Martini y las alitas Kansas City, y me conquistaron totalmente. Un must en La Mata. Los dueños son encantadores.</p>
+      <div class="review-author">
+        <div class="review-avatar">SB</div>
+        <div>
+          <div class="review-name">Sara B.</div>
+          <div class="review-source">Google · hace 1 semana</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="review-summary">
+    <div class="big-rating">4<span>,0</span></div>
+    <div class="review-stars" style="font-size:1.8rem; margin: 0.5rem 0;">★★★★☆</div>
+    <p style="color: var(--gray); font-size: 0.9rem;">Basado en <strong style="color:var(--white);">413 reseñas</strong> de Google</p>
+    <a href="https://www.google.es/maps/place/Mani+Sports+Bar/@38.0042196,-0.6580346,17z/data=!4m8!3m7!1s0xd63abb4eaaaaaab:0xd4b6d640fe8b0091!8m2!3d38.0042196!4d-0.6554597!9m1!1b1!16s%2Fg%2F11btmq8f2y?entry=ttu&g_ep=EgoyMDI2MDUxNy4wIKXMDSoASAFQAw%3D%3D" target="_blank" class="reviews-cta" data-i18n="reviewsBtn">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+      Ver todas las reseñas en Google
+    </a>
+  </div>
+</section>
+
+<!-- INFO & MAP -->
+<section class="info-section" id="info">
+  <div class="section-header">
+    <div class="section-label">Visítanos</div>
+    <h2 class="section-title">Dónde <span>Estamos</span></h2>
+    <div class="divider"></div>
+  </div>
+  <div class="info-layout">
+    <div>
+      <div class="info-block" style="margin-bottom: 2.5rem;">
+        <h3>Información</h3>
+        <div class="info-row">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          <div class="info-row-content">
+            <div class="info-row-label">Dirección</div>
+            <div class="info-row-value">Av. Alfredo Nobel, 250 · 03183 Torrevieja, Alicante</div>
+          </div>
+        </div>
+        <div class="info-row">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.69 3.4a2 2 0 0 1 1.99-2.18h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L7.91 8.96a16 16 0 0 0 6.29 6.29l1.09-1.09a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+          <div class="info-row-content">
+            <div class="info-row-label">Teléfono</div>
+            <div class="info-row-value"><a href="tel:646511206" style="color:var(--white);text-decoration:none;">646 511 206</a></div>
+          </div>
+        </div>
+          <div class="info-row-content">
+            <div class="info-row-label">Valoración Google</div>
+            <div class="info-row-value">4,0 ★ · 413 reseñas</div>
+          </div>
+        </div>
+      </div>
+      <div class="info-block">
+        <h3>Horario</h3>
+        <div class="schedule-row"><span class="schedule-day">Lunes – Domingo</span><span class="schedule-time">12:00 – 01:00</span></div>
+      </div>
+    </div>
+    <div>
+      <div class="map-placeholder">
+        <div class="map-pin-icon">📍</div>
+        <div>
+          <strong style="color: var(--white); display:block; margin-bottom:0.3rem;">Mani Sports Bar</strong>
+          Av. Alfredo Nobel, 250 · Torrevieja, Alicante
+        </div>
+        <a href="https://maps.google.com/?q=Av.+Alfredo+Nobel+250,+03183+Torrevieja,+Alicante" target="_blank" class="map-link">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          Abrir en Google Maps
+        </a>
+      </div>
+      <div style="margin-top: 1.5rem; padding: 1.5rem; background: var(--dark2); border: 1px solid var(--dark3); border-left: 3px solid var(--gold);">
+        <p style="font-family:'Barlow Condensed', sans-serif; font-weight: 700; font-size: 1rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--gold); margin-bottom: 0.5rem;">¿Tienes alguna consulta?</p>
+        <p style="font-size: 0.88rem; color: var(--gray); line-height: 1.6;">Para reservas de grupo o eventos especiales, llámanos o visítanos directamente.</p>
+        <div class="contact-box-phone">📞 <a href="tel:646511206">646 511 206</a></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">Mani <span>Sports</span> Bar</div>
+  <div class="footer-socials">
+    <a href="#" class="social-btn" aria-label="Instagram">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+    </a>
+    <a href="#" class="social-btn" aria-label="Facebook">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+    </a>
+    <a href="#" class="social-btn" aria-label="Google Maps">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+    </a>
+  </div>
+  <p style="margin-bottom: 0.3rem;">Av. Alfredo Nobel, 250 · 03183 Torrevieja, Alicante &nbsp;·&nbsp; <a href="tel:646511206" style="color:var(--gray);text-decoration:none;">646 511 206</a> &nbsp;·&nbsp; Abierto todos los días 12:00 – 01:00</p>
+  <p style="color: #555;">© 2026 Mani Sports Bar · El deporte, la cerveza y el encuentro</p>
+</footer>
+
+<script>
+  /* ============================================================
+   *  ✏️  EDICIÓN SEMANAL DEL TICKER — CAMBIA SOLO AQUÍ ABAJO
+   *  ------------------------------------------------------------
+   *  Cada partido es un objeto con:
+   *    emoji    → icono del deporte
+   *    liga     → nombre de la competición
+   *    texto    → equipos y marcador (o "Día · Hora" si es próximo)
+   *    enVivo   → true = muestra etiqueta "EN VIVO", false = sin etiqueta
+   * ============================================================ */
+
+  const TICKER_PARTIDOS = [
+    { emoji: "🏆", liga: "Champions League", texto: "Real Madrid 2 – 1 Bayern",  enVivo: true  },
+    { emoji: "⚽", liga: "LaLiga",           texto: "Villarreal 0 – 0 Sevilla",   enVivo: true  },
+    { emoji: "🏀", liga: "NBA Playoffs",     texto: "Lakers 108 – 104 Celtics",   enVivo: false },
+    { emoji: "🥊", liga: "UFC Fight Night",  texto: "Sábado · 22:00",             enVivo: false },
+    { emoji: "🏉", liga: "Premier Rugby",    texto: "Domingo · 15:00",            enVivo: false },
+  ];
+
+  /* --- NO HACE FALTA TOCAR NADA MÁS ABAJO DE ESTA LÍNEA --- */
+
+  function buildTicker() {
+    const track = document.getElementById('tickerTrack');
+    if (!track || !TICKER_PARTIDOS.length) return;
+    // duplicamos para que el loop sea continuo
+    const items = [...TICKER_PARTIDOS, ...TICKER_PARTIDOS];
+    track.innerHTML = items.map(p => `
+      <div class="ticker-item">
+        ${p.emoji} ${p.liga} &nbsp;<span class="score">${p.texto}</span>
+        ${p.enVivo ? '&nbsp;<span class="ticker-live">EN VIVO</span>' : ''}
+      </div>`).join('');
+  }
+
+  function showTab(id) {
+    document.querySelectorAll('.menu-panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.menu-tab').forEach(t => t.classList.remove('active'));
+    document.getElementById('tab-' + id).classList.add('active');
+    event.currentTarget.classList.add('active');
+  }
+
+  /* ── STADIUM CANVAS BACKGROUND ── */
+  function initStadium() {
+    const canvas = document.getElementById('bgCanvas');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    let W, H, particles = [], spotlights = [];
+
+    function resize() {
+      W = canvas.width  = canvas.offsetWidth;
+      H = canvas.height = canvas.offsetHeight;
+    }
+
+    function makeParticle() {
+      const roll = Math.random();
+      const color = roll > 0.7 ? '192,17,43' : roll > 0.45 ? '240,192,64' : '245,240,235';
+      return {
+        x: Math.random() * W,
+        y: H + 5,
+        r: Math.random() * 1.6 + 0.3,
+        vx: (Math.random() - 0.5) * 0.5,
+        vy: -(Math.random() * 0.7 + 0.2),
+        alpha: Math.random() * 0.55 + 0.15,
+        color
+      };
+    }
+
+    function makeSpot(i) {
+      return {
+        phase: (i / 4) * Math.PI * 2,
+        speed: 0.0015 + Math.random() * 0.002,
+        color: i % 3 === 0 ? '192,17,43' : '245,240,235',
+        intensity: 0.07 + Math.random() * 0.05,
+        side: i % 2
+      };
+    }
+
+    function init() {
+      particles = Array.from({length: 140}, p => {
+        const part = makeParticle();
+        part.y = Math.random() * H; // start scattered
+        return part;
+      });
+      spotlights = [0,1,2,3].map(makeSpot);
+    }
+
+    function drawField() {
+      ctx.save();
+      ctx.globalAlpha = 0.045;
+      ctx.strokeStyle = '#ffffff';
+      ctx.lineWidth = 1;
+      // centre circle
+      ctx.beginPath();
+      ctx.arc(W / 2, H * 1.05, H * 0.42, 0, Math.PI * 2);
+      ctx.stroke();
+      // halfway line
+      ctx.beginPath();
+      ctx.moveTo(0, H * 0.84);
+      ctx.lineTo(W, H * 0.84);
+      ctx.stroke();
+      // penalty arcs
+      ctx.beginPath();
+      ctx.arc(W * 0.13, H * 0.84, H * 0.13, 0, Math.PI, true);
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.arc(W * 0.87, H * 0.84, H * 0.13, 0, Math.PI, true);
+      ctx.stroke();
+      ctx.restore();
+    }
+
+    function drawSpotlights(t) {
+      spotlights.forEach(s => {
+        const ox = s.side ? W * 0.82 : W * 0.18;
+        const sweep = Math.sin(t * s.speed + s.phase) * 0.22;
+        const tx = W * (0.38 + sweep + (s.side ? 0.24 : 0));
+        const ty = H * 0.58;
+
+        const grad = ctx.createRadialGradient(ox, 0, 0, tx, ty, H * 0.75);
+        grad.addColorStop(0,   `rgba(${s.color},${s.intensity})`);
+        grad.addColorStop(0.35,`rgba(${s.color},${s.intensity * 0.35})`);
+        grad.addColorStop(1,   `rgba(${s.color},0)`);
+
+        ctx.save();
+        ctx.fillStyle = grad;
+        ctx.beginPath();
+        ctx.moveTo(ox, 0);
+        ctx.lineTo(tx - H * 0.38, ty + H * 0.25);
+        ctx.lineTo(tx + H * 0.38, ty + H * 0.25);
+        ctx.closePath();
+        ctx.fill();
+        ctx.restore();
+      });
+    }
+
+    function drawParticles() {
+      particles.forEach(p => {
+        ctx.save();
+        ctx.globalAlpha = p.alpha;
+        ctx.fillStyle = `rgba(${p.color},${p.alpha})`;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+
+        p.x += p.vx;
+        p.y += p.vy;
+        p.alpha -= 0.0006;
+
+        if (p.y < -8 || p.alpha <= 0.02) {
+          Object.assign(p, makeParticle());
+        }
+        if (p.x < 0) p.x = W;
+        if (p.x > W) p.x = 0;
+      });
+    }
+
+    function loop(t) {
+      ctx.clearRect(0, 0, W, H);
+      ctx.fillStyle = '#050508';
+      ctx.fillRect(0, 0, W, H);
+
+      // field floor glow
+      const floorGlow = ctx.createLinearGradient(0, H * 0.65, 0, H);
+      floorGlow.addColorStop(0, 'rgba(192,17,43,0)');
+      floorGlow.addColorStop(1, 'rgba(192,17,43,0.1)');
+      ctx.fillStyle = floorGlow;
+      ctx.fillRect(0, 0, W, H);
+
+      drawField();
+      drawSpotlights(t);
+      drawParticles();
+      requestAnimationFrame(loop);
+    }
+
+    window.addEventListener('resize', () => { resize(); init(); });
+    resize();
+    init();
+    requestAnimationFrame(loop);
+  }
+
+  /* ── TRANSLATIONS ── */
+  const TRANSLATIONS = {
+    es: {
+      navMenu:        'Carta',
+      navEvents:      'Eventos',
+      navCocktails:   'Cócteles',
+      navDrinks:      'Bebidas',
+      navReviews:     'Reseñas',
+      navContact:     'Contacto',
+      navDirections:  'Cómo llegar',
+      heroEyebrow:    'Torrevieja · Alicante · Desde el primer minuto',
+      heroSubtitle:   'Deporte · Gastronomía · Ambiente',
+      heroRating:     '(413 reseñas en Google)',
+      heroBtn1:       'Ver la carta',
+      heroBtn2:       'Cómo llegar',
+      reviewsBtn:     'Ver todas las reseñas en Google',
+      stripOpen:      'Abierto hoy: 12:00 – 01:00',
+    },
+    en: {
+      navMenu:        'Menu',
+      navEvents:      'Events',
+      navCocktails:   'Cocktails',
+      navDrinks:      'Drinks',
+      navReviews:     'Reviews',
+      navContact:     'Contact',
+      navDirections:  'Get directions',
+      heroEyebrow:    'Torrevieja · Alicante · Open every day',
+      heroSubtitle:   'Sport · Food · Atmosphere',
+      heroRating:     '(413 reviews on Google)',
+      heroBtn1:       'See the menu',
+      heroBtn2:       'Get directions',
+      reviewsBtn:     'See all reviews on Google',
+      stripOpen:      'Open today: 12:00 – 01:00',
+    },
+    sv: {
+      navMenu:        'Meny',
+      navEvents:      'Evenemang',
+      navCocktails:   'Cocktails',
+      navDrinks:      'Drycker',
+      navReviews:     'Recensioner',
+      navContact:     'Kontakt',
+      navDirections:  'Hitta hit',
+      heroEyebrow:    'Torrevieja · Alicante · Öppet varje dag',
+      heroSubtitle:   'Sport · Mat · Stämning',
+      heroRating:     '(413 recensioner på Google)',
+      heroBtn1:       'Se menyn',
+      heroBtn2:       'Hitta hit',
+      reviewsBtn:     'Se alla recensioner på Google',
+      stripOpen:      'Öppet idag: 12:00 – 01:00',
+    }
+  };
+
+  function setLang(lang) {
+    const t = TRANSLATIONS[lang];
+    if (!t) return;
+    // update all tagged elements
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+      const key = el.getAttribute('data-i18n');
+      if (t[key] !== undefined) el.textContent = t[key];
+    });
+    // update strip open text separately (it's inside a text node with an icon)
+    const stripItems = document.querySelectorAll('.info-item');
+    if (stripItems[0]) {
+      const svg = stripItems[0].querySelector('svg');
+      stripItems[0].innerHTML = '';
+      if (svg) stripItems[0].appendChild(svg);
+      stripItems[0].appendChild(document.createTextNode(' ' + t.stripOpen));
+    }
+    // update active button
+    document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.lang-btn').forEach(b => {
+      if (b.getAttribute('data-lang') === lang) b.classList.add('active');
+    });
+    document.documentElement.lang = lang;
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    buildTicker();
+    initStadium();
+  });
+</script>
+
+</body>
+</html>
